@@ -37,6 +37,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'graphene_django',
+    'graphql_jwt',
 ]
 
 MIDDLEWARE = [
@@ -124,9 +125,20 @@ MEDIA_ROOT = BASE_DIR / 'media'
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
+# Authentication
+
+AUTHENTICATION_BACKENDS = [
+    "graphql_jwt.backends.JSONWebTokenBackend",
+    "django.contrib.auth.backends.ModelBackend",
+]
+
 # Graphene configuration
 GRAPHENE = {
-    # "SCHEMA": "nom_app.schema.schema"
+    "SCHEMA": "app.books.schema.schema",
+    "MIDDLEWARE": [
+        "graphene_django.debug.DjangoDebugMiddleware",
+        "graphql_jwt.middleware.JSONWebTokenMiddleware",
+    ],
 }
 
 # LOGGING = {
