@@ -30,6 +30,10 @@ ALLOWED_HOSTS = ["localhost", "127.0.0.1"]
 
 INSTALLED_APPS = [
     'app.books',
+    'app.users',
+    'app.insurance',
+    'app.insurance_company',
+    'app.notification',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',

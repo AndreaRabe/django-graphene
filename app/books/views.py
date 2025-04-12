@@ -1,33 +1,32 @@
 import graphene
 import graphql_jwt
-from django.contrib.auth.models import User
 
 from app.books.models import Books
-from app.books.schema import BooksType, UserType
+from app.books.schema import BooksType
 
 
 # Views for user
-class RegisterUser(graphene.Mutation):
-    class Arguments:
-        username = graphene.String(required=True)
-        email = graphene.String()
-        password = graphene.String(required=True)
-
-    user = graphene.Field(UserType)
-
-    def mutate(self, info, username, email=None, password=None):
-        if User.objects.filter(username=username).exists():
-            raise Exception("Ce nom d'utilisateur est déjà pris")
-
-        user = User(username=username, email=email)
-        user.set_password(password)
-        user.save()
-
-        return RegisterUser(user=user)
+# class RegisterUser(graphene.Mutation):
+#     class Arguments:
+#         username = graphene.String(required=True)
+#         email = graphene.String()
+#         password = graphene.String(required=True)
+#
+#     user = graphene.Field(UserType)
+#
+#     def mutate(self, info, username, email=None, password=None):
+#         if User.objects.filter(username=username).exists():
+#             raise Exception("Ce nom d'utilisateur est déjà pris")
+#
+#         user = User(username=username, email=email)
+#         user.set_password(password)
+#         user.save()
+#
+#         return RegisterUser(user=user)
 
 
 # Views for books
-class Query(graphene.ObjectType):
+class BooksQuery(graphene.ObjectType):
     all_books = graphene.List(BooksType)
 
     search_books = graphene.List(BooksType, title=graphene.String(required=True))
@@ -97,7 +96,7 @@ class DeleteBook(graphene.Mutation):
 
 
 class Mutation(graphene.ObjectType):
-    register_user = RegisterUser.Field()
+    # register_user = RegisterUser.Field()
     token_auth = graphql_jwt.ObtainJSONWebToken.Field()
     verify_token = graphql_jwt.Verify.Field()
     refresh_token = graphql_jwt.Refresh.Field()
