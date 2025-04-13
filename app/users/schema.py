@@ -10,12 +10,12 @@ class UsersType(DjangoObjectType):
 
 
 class HrAdvisorType(UsersType):
-    class Meta(UsersType.Meta):
+    class Meta:
         model = HrAdvisor
-        fields = UsersType.Meta.fields + '__all__'
+        fields = '__all__'
 
 
 class EmployeeType(UsersType):
-    class Meta(UsersType.Meta):
+    class Meta:
         model = Employee
-        fields = UsersType.Meta.fields + '__all__'
+        fields = '__all__'

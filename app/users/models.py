@@ -1,7 +1,8 @@
+from django.contrib.auth.models import AbstractUser
 from django.db import models
 
 
-class User(models.Model):
+class User(AbstractUser):
     ROLE_CHOICES = [
         ('hr', 'Conseiller RH'),
         ('employee', 'Employé'),
@@ -19,15 +20,7 @@ class User(models.Model):
 
 
 class HrAdvisor(User):
-    DEPARTMENT_CHOICES = [
-        ("Recrutement", "Recrutement"),
-        ("Formation", "Formation"),
-        ("Relations sociales", "Relations sociales"),
-        ("Développement", "Développement des talents"),
-        ("Paie", "Rémunération"),
-        ("SSCT", "Santé, Sécurité et Conditions de travail"),
-    ]
-    department = models.CharField(max_length=50, choices=DEPARTMENT_CHOICES)
+    department = models.CharField(max_length=50)
 
     def __str__(self):
         return f"Conseiller RH du departement : {self.department}"
