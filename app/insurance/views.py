@@ -23,6 +23,13 @@ class CreateInsurance(graphene.Mutation):
     insurance = graphene.Field(InsuranceType)
 
     def mutate(self, info, user, insurance_company, start_date, end_date):
+        # authorization
+        user = info.context.user
+        if user.is_anonymous:
+            raise Exception("You must be connected to perform this action")
+        if user.role != "hr":
+            raise Exception("You must be Hr Advisor to perform this action")
+
         user_data = User.objects.get(pk=user)
         insurance_company_data = InsuranceCompany.objects.get(pk=insurance_company)
 
@@ -43,6 +50,13 @@ class UpdateInsurance(graphene.Mutation):
     insurance = graphene.Field(InsuranceType)
 
     def mutate(self, info, id, start_date=None, end_date=None):
+        # authorization
+        user = info.context.user
+        if user.is_anonymous:
+            raise Exception("You must be connected to perform this action")
+        if user.role != "hr":
+            raise Exception("You must be Hr Advisor to perform this action")
+
         try:
             insurance = Insurance.objects.get(id=id)
         except Insurance.DoesNotExist:
@@ -66,6 +80,13 @@ class DeleteInsurance(graphene.Mutation):
     insurance = graphene.Field(InsuranceType)
 
     def mutate(self, info, id):
+        # authorization
+        user = info.context.user
+        if user.is_anonymous:
+            raise Exception("You must be connected to perform this action")
+        if user.role != "hr":
+            raise Exception("You must be Hr Advisor to perform this action")
+
         try:
             insurance = Insurance.objects.get(id=id)
         except Insurance.DoesNotExist:

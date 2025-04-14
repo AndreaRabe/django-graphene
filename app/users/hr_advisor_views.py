@@ -39,7 +39,6 @@ class CreateHrAdvisor(graphene.Mutation):
 
 class UpdateHrAdvisor(graphene.Mutation):
     class Arguments:
-        IM = graphene.ID(required=True)
         first_name = graphene.String()
         last_name = graphene.String()
         email = graphene.String()
@@ -49,9 +48,14 @@ class UpdateHrAdvisor(graphene.Mutation):
 
     hr_advisor = graphene.Field(HrAdvisorType)
 
-    def mutate(self, info, IM, first_name=None, last_name=None, email=None, phone=None, password=None, department=None):
+    def mutate(self, info, first_name=None, last_name=None, email=None, phone=None, password=None, department=None):
+        # authorization
+        user = info.context.user
+        if user.is_anonymous:
+            raise Exception("You must be connected to perform this action")
+
         try:
-            hr_advisor = HrAdvisor.objects.get(IM=IM)
+            hr_advisor = HrAdvisor.objects.get(IM=user.IM)
         except HrAdvisor.DoesNotExist:
             raise Exception('HrAdvisor does not exist.')
 
@@ -75,14 +79,19 @@ class UpdateHrAdvisor(graphene.Mutation):
 
 class DeleteHrAdvisor(graphene.Mutation):
     class Arguments:
-        IM = graphene.ID(required=True)
+        pass
 
     ok = graphene.Boolean()
     hr_advisor = graphene.Field(HrAdvisorType)
 
-    def mutate(self, info, IM):
+    def mutate(self, info):
+        # authorization
+        user = info.context.user
+        if user.is_anonymous:
+            raise Exception("You must be connected to perform this action")
+
         try:
-            hr_advisor = HrAdvisor.objects.get(IM=IM)
+            hr_advisor = HrAdvisor.objects.get(IM=user.IM)
         except HrAdvisor.DoesNotExist:
             raise Exception('HrAdvisor does not exist.')
 

@@ -7,7 +7,7 @@ from app.users.schema import EmployeeType
 class EmployeeQuery(graphene.ObjectType):
     all_employees = graphene.List(EmployeeType)
 
-    def resolve_all_employees(root, info):
+    def resolve_all_employees(self, info):
         return Employee.objects.all()
 
 
@@ -43,7 +43,6 @@ class CreateEmployee(graphene.Mutation):
 
 class UpdateEmployee(graphene.Mutation):
     class Arguments:
-        IM = graphene.ID(required=True)
         first_name = graphene.String()
         last_name = graphene.String()
         email = graphene.String()
@@ -55,11 +54,16 @@ class UpdateEmployee(graphene.Mutation):
 
     employee = graphene.Field(EmployeeType)
 
-    def mutate(self, info, IM, first_name=None, last_name=None, email=None, phone=None, password=None,
+    def mutate(self, info, first_name=None, last_name=None, email=None, phone=None, password=None,
                job_title=None,
                job_description=None, contract_type=None):
+        # authorization
+        user = info.context.user
+        if user.is_anonymous:
+            raise Exception("You must be connected to perform this action")
+
         try:
-            employee = Employee.objects.get(IM=IM)
+            employee = Employee.objects.get(IM=user.IM)
         except Employee.DoesNotExist:
             raise Exception('Employee does not exist.')
 
@@ -87,14 +91,19 @@ class UpdateEmployee(graphene.Mutation):
 
 class DeleteEmployee(graphene.Mutation):
     class Arguments:
-        IM = graphene.ID(required=True)
+        pass
 
     ok = graphene.Boolean()
     employee = graphene.Field(EmployeeType)
 
-    def mutate(self, info, IM):
+    def mutate(self, info):
+        # authorization
+        user = info.context.user
+        if user.is_anonymous:
+            raise Exception("You must be connected to perform this action")
+
         try:
-            employee = Employee.objects.get(IM=IM)
+            employee = Employee.objects.get(IM=user.IM)
         except Employee.DoesNotExist:
             raise Exception('Employee does not exist.')
 

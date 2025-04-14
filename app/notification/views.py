@@ -23,6 +23,13 @@ class CreateNotification(graphene.Mutation):
     notification = graphene.Field(NotificationType)
 
     def mutate(self, info, user, title, text):
+        # authorization
+        user = info.context.user
+        if user.is_anonymous:
+            raise Exception("You must be connected to perform this action")
+        if user.role != "hr":
+            raise Exception("You must be Hr Advisor to perform this action")
+
         user_data = User.objects.get(pk=user)
 
         notification = Notification(user=user_data, title=title, text=text)
