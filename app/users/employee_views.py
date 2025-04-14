@@ -34,7 +34,7 @@ class CreateEmployee(graphene.Mutation):
 
         employee = Employee(username=username, first_name=first_name, last_name=last_name, email=email, phone=phone,
                             job_title=job_title,
-                            job_description=job_description, contract_type=contract_type)
+                            job_description=job_description, contract_type=contract_type, role='employee')
         employee.set_password(password)
         employee.save()
 

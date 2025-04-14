@@ -1,4 +1,5 @@
 import graphene
+import graphql_jwt
 
 from app.insurance.views import InsuranceQuery, InsuranceMutation
 from app.insurance_company.views import InsuranceCompanyMutation, InsuranceCompanyQuery
@@ -14,7 +15,9 @@ class Query(HrAdvisorQuery, EmployeeQuery, InsuranceCompanyQuery, InsuranceQuery
 
 class Mutation(HrAdvisorMutation, EmployeeMutation, InsuranceCompanyMutation, InsuranceMutation, NotificationMutation,
                graphene.ObjectType):
-    pass
+    token_auth = graphql_jwt.ObtainJSONWebToken.Field()
+    verify_token = graphql_jwt.Verify.Field()
+    refresh_token = graphql_jwt.Refresh.Field()
 
 
 schema = graphene.Schema(query=Query, mutation=Mutation)
