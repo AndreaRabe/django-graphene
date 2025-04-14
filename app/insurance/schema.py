@@ -6,4 +6,4 @@ from app.insurance.models import Insurance
 class InsuranceType(DjangoObjectType):
     class Meta:
         model = Insurance
-        fields = '__all__'
+        fields = ("id", "user", "insurance_company", "start_date", "end_date")

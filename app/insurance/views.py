@@ -23,8 +23,11 @@ class CreateInsurance(graphene.Mutation):
     insurance = graphene.Field(InsuranceType)
 
     def mutate(self, info, user, insurance_company, start_date, end_date):
-        insurance = Insurance(user=User.objects.get(pk=user),
-                              insurance_company=InsuranceCompany.objects.get(pk=insurance_company),
+        user_data = User.objects.get(pk=user)
+        insurance_company_data = InsuranceCompany.objects.get(pk=insurance_company)
+
+        insurance = Insurance(user=user_data,
+                              insurance_company=insurance_company_data,
                               start_date=start_date, end_date=end_date)
         insurance.save()
 
