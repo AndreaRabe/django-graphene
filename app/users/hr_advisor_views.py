@@ -13,6 +13,7 @@ class HrAdvisorQuery(graphene.ObjectType):
 
 class CreateHrAdvisor(graphene.Mutation):
     class Arguments:
+        username = graphene.String(required=True)
         first_name = graphene.String(required=True)
         last_name = graphene.String(required=True)
         email = graphene.String(required=True)
@@ -22,10 +23,13 @@ class CreateHrAdvisor(graphene.Mutation):
 
     hr_advisor = graphene.Field(HrAdvisorType)
 
-    def mutate(self, info, first_name, last_name, email, phone, password, department):
+    def mutate(self, info, username, first_name, last_name, email, phone, password, department):
         if HrAdvisor.objects.filter(email=email).exists():
             raise Exception('Email already registered.')
-        hr_advisor = HrAdvisor(first_name=first_name, last_name=last_name, email=email, phone=phone, role='hr',
+        if HrAdvisor.objects.filter(username=username).exists():
+            raise Exception('UserName already registered.')
+        hr_advisor = HrAdvisor(username=username, first_name=first_name, last_name=last_name, email=email, phone=phone,
+                               role='hr',
                                department=department)
         hr_advisor.set_password(password)
         hr_advisor.save()
