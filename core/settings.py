@@ -24,7 +24,7 @@ SECRET_KEY = 'django-insecure-(rg&adr&t7%p39^3+1uhywuw39%t0qbkxb*8(48-5f+3ls3hcn
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ["localhost", "127.0.0.1"]
+ALLOWED_HOSTS = ["localhost", "127.0.0.1", "0.0.0.0"]
 
 # Application definition
 
@@ -85,6 +85,7 @@ DATABASES = {
         'USER': 'rabe',
         'PASSWORD': 'andrearabe28',
         'HOST': 'localhost',
+        # 'HOST': 'host.docker.internal',  # config pour que le conteneur puisse acceder au postgres sur ma machine
         'PORT': '5432',
     }
 }

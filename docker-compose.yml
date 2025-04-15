@@ -1,0 +1,15 @@
+services:
+  web:
+    build:
+      context: .  # Utilise le Dockerfile dans le répertoire courant
+    volumes:
+      - ./app/  # Synchronise le dossier local ./src avec /app/src dans le conteneur
+      - ./core/
+      - ./pyproject.toml:/app/pyproject.toml  # Synchronise le fichier pyproject.toml
+      - ./poetry.lock:/app/poetry.lock  # Synchronise le fichier poetry.lock
+    ports:
+      - "8000:8000"  # Expose le port 8000 du conteneur sur le port 8000 de la machine hôte
+    environment:
+      - PYTHONUNBUFFERED=1  # Permet d'afficher les logs Python en temps réel
+    command: >
+      sh -c "poetry run python manage.py runserver 0.0.0.0:8000"

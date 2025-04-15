@@ -11,6 +11,7 @@ class Insurance(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='insurances')
     insurance_company = models.ForeignKey(InsuranceCompany, on_delete=models.CASCADE, related_name='insurances')
+    beneficiary = models.CharField(max_length=150)
     start_date = models.DateField()
     end_date = models.DateField()
 

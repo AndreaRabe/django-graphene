@@ -8,7 +8,7 @@ class User(AbstractUser):
         ('employee', 'Employé'),
     ]
     IM = models.AutoField(primary_key=True, editable=False)
-    username = models.CharField(max_length=50)
+    username = models.CharField(max_length=50, unique=True)
     first_name = models.CharField(max_length=50)
     last_name = models.CharField(max_length=50)
     email = models.EmailField(unique=True)

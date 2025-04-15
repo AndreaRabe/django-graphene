@@ -9,33 +9,44 @@ from app.users.models import User
 class InsuranceQuery(graphene.ObjectType):
     all_insurances = graphene.List(InsuranceType)
 
+    search_employee = graphene.List(InsuranceType, IM=graphene.String(), Username=graphene.String())
+
     def resolve_all_insurances(root, info):
         return Insurance.objects.all()
+
+    def resolve_search_employee(root, info, IM=None, Username=None):
+        queryset = Insurance.objects.all()
+        if IM:
+            queryset = queryset.filter(user__IM__icontains=IM)
+        if Username:
+            queryset = queryset.filter(user__username__icontains=Username)
+        return queryset
 
 
 class CreateInsurance(graphene.Mutation):
     class Arguments:
-        user = graphene.ID(required=True)
+        user_id = graphene.ID(required=True)
         insurance_company = graphene.ID(required=True)
+        beneficiary = graphene.String(required=True)
         start_date = graphene.Date(required=True)
         end_date = graphene.Date(required=True)
 
     insurance = graphene.Field(InsuranceType)
 
-    def mutate(self, info, user, insurance_company, start_date, end_date):
+    def mutate(self, info, user_id, insurance_company, beneficiary, start_date, end_date):
         # authorization
-        user = info.context.user
-        if user.is_anonymous:
+        user_details = info.context.user
+        if user_details.is_anonymous:
             raise Exception("You must be connected to perform this action")
-        if user.role != "hr":
+        if user_details.role != "hr":
             raise Exception("You must be Hr Advisor to perform this action")
 
-        user_data = User.objects.get(pk=user)
+        user_data = User.objects.get(pk=user_id)
         insurance_company_data = InsuranceCompany.objects.get(pk=insurance_company)
 
         insurance = Insurance(user=user_data,
                               insurance_company=insurance_company_data,
-                              start_date=start_date, end_date=end_date)
+                              start_date=start_date, end_date=end_date, beneficiary=beneficiary)
         insurance.save()
 
         return CreateInsurance(insurance=insurance)
@@ -44,12 +55,13 @@ class CreateInsurance(graphene.Mutation):
 class UpdateInsurance(graphene.Mutation):
     class Arguments:
         id = graphene.ID(required=True)
+        beneficiary = graphene.String()
         start_date = graphene.Date()
         end_date = graphene.Date()
 
     insurance = graphene.Field(InsuranceType)
 
-    def mutate(self, info, id, start_date=None, end_date=None):
+    def mutate(self, info, id, start_date=None, beneficiary=None, end_date=None):
         # authorization
         user = info.context.user
         if user.is_anonymous:
@@ -66,6 +78,8 @@ class UpdateInsurance(graphene.Mutation):
             insurance.start_date = start_date
         if end_date is not None:
             insurance.end_date = end_date
+        if beneficiary is not None:
+            insurance.beneficiary = beneficiary
 
         insurance.save()
 
