@@ -49,3 +49,15 @@ class CreateNotification(graphene.Mutation):
 
 class NotificationMutation(graphene.ObjectType):
     create_notification = CreateNotification.Field()
+
+
+def notify_user(user, title, text):
+    notification = Notification(user=user, title=title, text=text)
+    notification.save()
+    send_mail(
+        subject=title,
+        message=text,
+        from_email=settings.DEFAULT_FROM_EMAIL,
+        recipient_list=[user.email],
+        fail_silently=False,
+    )

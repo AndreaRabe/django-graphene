@@ -22,5 +22,6 @@ from core.view import schema
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path("api/v1/graphql", GraphQLView.as_view(graphiql=True, schema=schema))
+    path("api/v1/graphql", GraphQLView.as_view(graphiql=True, schema=schema)),
+    # path("playground/", GraphQLPlaygroundView.as_view(endpoint="/api/v1/graphql")),
 ]

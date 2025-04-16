@@ -13,3 +13,15 @@ services:
       - PYTHONUNBUFFERED=1  # Permet d'afficher les logs Python en temps réel
     command: >
       sh -c "poetry run python manage.py runserver 0.0.0.0:8000"
+
+  db:
+    image: postgres:15
+    restart: always
+    environment:
+      POSTGRES_USER: rabe
+      POSTGRES_PASSWORD: andrearabe28
+      POSTGRES_DB: soa_db
+    ports:
+      - '5432:5432'
+    volumes:
+

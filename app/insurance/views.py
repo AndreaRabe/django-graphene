@@ -3,6 +3,7 @@ import graphene
 from app.insurance.models import Insurance
 from app.insurance.schema import InsuranceType
 from app.insurance_company.models import InsuranceCompany
+from app.notification.views import notify_user
 from app.users.models import User
 
 
@@ -80,6 +81,7 @@ class UpdateInsurance(graphene.Mutation):
             insurance.end_date = end_date
         if beneficiary is not None:
             insurance.beneficiary = beneficiary
+            notify_user(insurance.user, "Modification d'assurance", f"Bénéficiaire mis à jour : {beneficiary}")
 
         insurance.save()
 
