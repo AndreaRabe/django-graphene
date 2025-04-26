@@ -88,8 +88,39 @@ DATABASES = {
         'HOST': 'localhost',
         # 'HOST': 'host.docker.internal',  # config pour que le conteneur puisse acceder au postgres sur ma machine
         'PORT': '5432',
-    }
+    },
+    'insurance_company_db': {
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': 'insurance_company_db',
+        'USER': 'rabe',
+        'PASSWORD': 'andrearabe28',
+        'HOST': 'localhost',
+        'PORT': '5432',
+    },
+    'insurance_db': {
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': 'insurance_db',
+        'USER': 'rabe',
+        'PASSWORD': 'andrearabe28',
+        'HOST': 'localhost',
+        'PORT': '5432',
+    },
+    'notification_db': {
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': 'notification_db',
+        'USER': 'rabe',
+        'PASSWORD': 'andrearabe28',
+        'HOST': 'localhost',
+        'PORT': '5432',
+    },
 }
+
+DATABASE_ROUTERS = [
+    'app.insurance_company.insurance_company_database_router.InsuranceCompanyRouter',
+    'app.insurance.insurance_database_router.InsuranceRouter',
+    'app.notification.notification_database_router.NotificationRouter',
+    'app.users.users_database_router.UserRouter',
+]
 
 # Password validation
 # https://docs.djangoproject.com/en/4.2/ref/settings/#auth-password-validators
