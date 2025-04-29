@@ -23,6 +23,9 @@ class User(AbstractUser):
 class HrAdvisor(User):
     department = models.CharField(max_length=50)
 
+    class Meta:
+        app_label = "users"
+
     def __str__(self):
         return f"Conseiller RH du departement : {self.department}"
 
@@ -38,6 +41,9 @@ class Employee(User):
     job_title = models.CharField(max_length=50)
     job_description = models.TextField()
     contract_type = models.CharField(max_length=50, choices=CONTRACT_TYPE_CHOICES)
+
+    class Meta:
+        app_label = "users"
 
     def __str__(self):
         return f"{self.first_name} {self.last_name} - {self.job_title}"

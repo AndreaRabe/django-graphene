@@ -9,5 +9,8 @@ class InsuranceCompany(models.Model):
     email = models.EmailField(unique=True)
     created_at = models.DateTimeField(auto_now_add=True)
 
+    class Meta:
+        app_label = "insurance_company"
+
     def __str__(self):
         return f"{self.name} situe à {self.address},  {self.phone} & {self.email}"
