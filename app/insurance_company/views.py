@@ -100,3 +100,6 @@ class InsuranceCompanyMutation(graphene.ObjectType):
     create_company = CreateInsuranceCompany.Field()
     update_company = UpdateInsuranceCompany.Field()
     delete_company = DeleteInsuranceCompany.Field()
+
+
+insurance_company_schema = graphene.Schema(query=InsuranceCompanyQuery, mutation=InsuranceCompanyMutation)
