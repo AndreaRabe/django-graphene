@@ -61,3 +61,6 @@ def notify_user(user, title, text):
         recipient_list=[user.email],
         fail_silently=False,
     )
+
+
+notification_schema = graphene.Schema(query=NotificationQuery, mutation=NotificationMutation)
