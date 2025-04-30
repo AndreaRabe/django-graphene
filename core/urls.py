@@ -18,10 +18,13 @@ from django.contrib import admin
 from django.urls import path
 from graphene_django.views import GraphQLView
 
-from core.view import schema
+from app.insurance.views import insurance_schema
+from app.users.views import user_schema
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path("api/v1/graphql", GraphQLView.as_view(graphiql=True, schema=schema)),
+    # path("api/v1/graphql", GraphQLView.as_view(graphiql=True, schema=schema)),
     # path("playground/", GraphQLPlaygroundView.as_view(endpoint="/api/v1/graphql")),
+    path("insurance/graphql", GraphQLView.as_view(graphiql=True, schema=insurance_schema)),
+    path("user/graphql", GraphQLView.as_view(graphiql=True, schema=user_schema))
 ]
